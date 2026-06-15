@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f172a">
+<meta name="description" content="Calculadora bem-humorada que estima se você já pode dirigir depois de beber. Estimativa aproximada — na dúvida, chame um motorista.">
+<title>Posso Dirigir? 🚗🍺</title>
+<style>
+  :root{
+    --bg1:#0f172a; --bg2:#1e1b4b; --card:#1e293b; --card2:#27344a;
+    --txt:#e2e8f0; --muted:#94a3b8; --line:#334155;
+    --accent:#38bdf8; --accent2:#818cf8;
+    --green:#22c55e; --yellow:#eab308; --red:#ef4444;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    min-height:100%;font-size:16px;line-height:1.5}
+  body{padding:18px 16px 60px;max-width:520px;margin:0 auto}
+  header{text-align:center;margin:8px 0 22px}
+  header h1{font-size:1.7rem;font-weight:800;letter-spacing:-.5px}
+  header h1 .em{font-size:1.5rem}
+  header p{color:var(--muted);font-size:.9rem;margin-top:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .card h2{font-size:1.05rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  label{display:block;font-size:.85rem;color:var(--muted);margin:0 0 6px 2px;font-weight:600}
+  .field{margin-bottom:16px}
+  input,select{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:12px;padding:13px 12px;font-size:1rem;font-family:inherit;outline:none;
+    -webkit-appearance:none;appearance:none}
+  input:focus,select:focus{border-color:var(--accent)}
+  select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+  .row{display:flex;gap:12px}
+  .row>*{flex:1}
+  /* sexo toggle */
+  .seg{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .seg button{flex:1;background:transparent;border:none;color:var(--muted);padding:13px 6px;
+    font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+  .seg button.on{background:var(--accent);color:#06283d}
+  /* drinks repeater */
+  .drink{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;position:relative}
+  .drink .del{position:absolute;top:8px;right:8px;background:#3a2230;color:var(--red);border:none;
+    width:30px;height:30px;border-radius:9px;font-size:1.1rem;cursor:pointer;line-height:1}
+  .qty{display:flex;align-items:center;gap:0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .qty button{width:48px;height:46px;background:transparent;border:none;color:var(--accent);
+    font-size:1.5rem;cursor:pointer;font-weight:700}
+  .qty span{flex:1;text-align:center;font-size:1.1rem;font-weight:700}
+  .addbtn{width:100%;background:transparent;border:2px dashed var(--line);color:var(--accent);
+    border-radius:12px;padding:13px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .addbtn:active{background:var(--card2)}
+  /* time toggle */
+  .when{display:flex;gap:10px;margin-bottom:12px}
+  .when button{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--muted);
+    border-radius:12px;padding:12px;font-weight:600;cursor:pointer;font-family:inherit;font-size:.92rem}
+  .when button.on{background:var(--accent2);color:#1a103d;border-color:var(--accent2)}
+  .hidden{display:none!important}
+  /* calc button */
+  .calc{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#0b1220;
+    border:none;border-radius:14px;padding:17px;font-size:1.15rem;font-weight:800;cursor:pointer;
+    font-family:inherit;margin-top:4px;box-shadow:0 8px 20px rgba(56,189,248,.25)}
+  .calc:active{transform:translateY(1px)}
+  /* result */
+  #result{scroll-margin-top:20px}
+  .res-card{border-width:2px;text-align:center}
+  .res-card.ok{border-color:var(--green)}
+  .res-card.no{border-color:var(--red)}
+  .res-emoji{font-size:3rem;line-height:1}
+  .res-title{font-size:1.4rem;font-weight:800;margin:10px 0 4px}
+  .res-title.ok{color:var(--green)} .res-title.no{color:var(--red)}
+  .res-msg{font-size:1rem;margin:10px 0 16px;color:var(--txt)}
+  .stats{display:flex;gap:10px;margin:14px 0}
+  .stat{flex:1;background:var(--card2);border-radius:12px;padding:12px 6px}
+  .stat .v{font-size:1.25rem;font-weight:800}
+  .stat .l{font-size:.72rem;color:var(--muted);margin-top:3px}
+  .freebar{height:10px;background:var(--card2);border-radius:99px;overflow:hidden;margin:6px 0 4px}
+  .freebar i{display:block;height:100%;background:linear-gradient(90deg,var(--yellow),var(--green));border-radius:99px;transition:width .6s}
+  .when-free{background:#0c2a3a;border:1px solid #16415a;border-radius:12px;padding:14px;margin-top:14px}
+  .when-free .h{font-size:.8rem;color:var(--muted)}
+  .when-free .t{font-size:1.6rem;font-weight:800;color:var(--accent);margin:2px 0}
+  .remind{width:100%;background:var(--green);color:#052e16;border:none;border-radius:12px;
+    padding:14px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;margin-top:10px}
+  .remind.alt{background:var(--card2);color:var(--accent);border:1px solid var(--line);margin-top:8px}
+  /* disclaimer */
+  .disc{background:#2a1f12;border:1px solid #4a3a1a;border-radius:14px;padding:14px;font-size:.82rem;color:#fcd9a8}
+  .disc b{color:#fbbf24}
+  footer{text-align:center;margin-top:26px;color:var(--muted);font-size:.85rem}
+  footer .by{font-weight:700;color:var(--txt)}
+  footer .heart{color:var(--red)}
+  .tiny{font-size:.75rem;color:var(--muted);margin-top:8px;line-height:1.45}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="em">🚗</span> Posso Dirigir? <span class="em">🍺</span></h1>
+  <p>A calculadora que te diz se é melhor pegar o volante… ou o Uber.</p>
+</header>
+
+<!-- DADOS -->
+<div class="card">
+  <h2>👤 Seus dados</h2>
+  <div class="field">
+    <label>Sexo biológico</label>
+    <div class="seg" id="sexSeg">
+      <button type="button" data-v="m" class="on">♂ Masculino</button>
+      <button type="button" data-v="f">♀ Feminino</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field">
+      <label>Idade</label>
+      <input id="idade" type="number" inputmode="numeric" min="18" max="110" placeholder="ex: 30" value="30">
+    </div>
+    <div class="field">
+      <label>Peso (kg)</label>
+      <input id="peso" type="number" inputmode="numeric" min="35" max="250" placeholder="ex: 75" value="75">
+    </div>
+  </div>
+  <div class="field">
+    <label>Altura (cm)</label>
+    <input id="altura" type="number" inputmode="numeric" min="130" max="230" placeholder="ex: 175" value="175">
+  </div>
+</div>
+
+<!-- BEBIDAS -->
+<div class="card">
+  <h2>🍻 O que você bebeu?</h2>
+  <div id="drinks"></div>
+  <button type="button" class="addbtn" id="addDrink">＋ Adicionar bebida</button>
+</div>
+
+<!-- HORA -->
+<div class="card">
+  <h2>⏰ Quando você parou de beber?</h2>
+  <div class="when">
+    <button type="button" id="wNow" class="on">Acabei agora</button>
+    <button type="button" id="wTime">Foi mais cedo</button>
+  </div>
+  <div class="field hidden" id="timeField">
+    <label>Horário do último gole</label>
+    <input id="horaFim" type="time">
+  </div>
+</div>
+
+<button class="calc" id="calcBtn">Calcular 🚦</button>
+
+<!-- RESULTADO -->
+<div id="result"></div>
+
+<!-- DISCLAIMER -->
+<div class="card disc">
+  <b>⚠️ Aviso importante:</b> este resultado é uma <b>estimativa aproximada</b>, baseada em
+  fórmulas médias (Widmark/Watson). O efeito real do álcool varia com metabolismo, alimentação,
+  remédios, sono e mil outros fatores. <b>No Brasil vale a Lei Seca: tolerância zero.</b>
+  Nenhum cálculo substitui o bom senso — <b>na menor dúvida, não dirija.</b> Chame um motorista,
+  um amigo ou um aplicativo. Sua vida e a dos outros valem mais que qualquer pressa.
+</div>
+
+<footer>
+  <p>Developed with <span class="heart">♥</span> by <span class="by">Wanderson Castro</span></p>
+  <p class="tiny">Ferramenta educativa e de conscientização. Não nos responsabilizamos por decisões tomadas com base no resultado.</p>
+</footer>
+
+<script>
+/* ---------- dados das bebidas ---------- */
+const DRINKS = [
+  {id:'cerveja',  name:'🍺 Cerveja',            abv:5,  serv:[['Latinha (350ml)',350],['Long neck (355ml)',355],['Garrafa (600ml)',600],['Caneca de chopp (300ml)',300]]},
+  {id:'ipa',      name:'🍺 Cerveja forte / IPA', abv:8,  serv:[['Latinha (350ml)',350],['Copo (300ml)',300],['Garrafa (500ml)',500]]},
+  {id:'vinho',    name:'🍷 Vinho',              abv:12, serv:[['Taça (150ml)',150],['Taça cheia (200ml)',200],['Garrafa (750ml)',750]]},
+  {id:'espumante',name:'🥂 Espumante / Champanhe',abv:12,serv:[['Taça (120ml)',120],['Garrafa (750ml)',750]]},
+  {id:'caipirinha',name:'🍹 Caipirinha',        abv:40, serv:[['1 caipirinha (50ml cachaça)',50],['Caprichada (80ml)',80]]},
+  {id:'cachaca',  name:'🥃 Cachaça / Pinga',    abv:40, serv:[['Dose (50ml)',50],['Dose dupla (100ml)',100]]},
+  {id:'vodka',    name:'🍸 Vodka',              abv:40, serv:[['Dose / shot (50ml)',50],['Drink (60ml)',60]]},
+  {id:'whisky',   name:'🥃 Whisky',             abv:40, serv:[['Dose (50ml)',50],['Dose dupla (100ml)',100]]},
+  {id:'gin',      name:'🍸 Gin (com tônica)',   abv:40, serv:[['1 drink (50ml gin)',50]]},
+  {id:'tequila',  name:'🌵 Tequila',            abv:38, serv:[['Shot (40ml)',40],['Shot duplo (80ml)',80]]},
+  {id:'licor',    name:'🍫 Licor',              abv:20, serv:[['Dose (50ml)',50]]},
+  {id:'sake',     name:'🍶 Saquê',              abv:15, serv:[['Copinho (80ml)',80]]},
+];
+const ETHANOL_DENSITY = 0.789;   // g/ml
+const BETA = 0.15;               // g/L por hora (eliminação média)
+const LEI_SECA = 0.0;            // tolerância zero (Brasil)
+
+/* ---------- estado ---------- */
+let sex = 'm';
+let when = 'now';
+
+/* ---------- sexo ---------- */
+document.querySelectorAll('#sexSeg button').forEach(b=>{
+  b.onclick=()=>{document.querySelectorAll('#sexSeg button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); sex=b.dataset.v;};
+});
+
+/* ---------- quando ---------- */
+const wNow=document.getElementById('wNow'), wTime=document.getElementById('wTime'),
+      timeField=document.getElementById('timeField');
+wNow.onclick=()=>{when='now';wNow.classList.add('on');wTime.classList.remove('on');timeField.classList.add('hidden');};
+wTime.onclick=()=>{when='time';wTime.classList.add('on');wNow.classList.remove('on');timeField.classList.remove('hidden');
+  if(!document.getElementById('horaFim').value){const n=new Date();
+    document.getElementById('horaFim').value=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}};
+
+/* ---------- repeater de bebidas ---------- */
+const drinksEl=document.getElementById('drinks');
+function drinkRow(){
+  const div=document.createElement('div');
+  div.className='drink';
+  const opts=DRINKS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+  div.innerHTML=`
+    <button type="button" class="del" title="remover">✕</button>
+    <div class="field"><label>Bebida</label><select class="d-type">${opts}</select></div>
+    <div class="field"><label>Tamanho / dose</label><select class="d-serv"></select></div>
+    <div class="field" style="margin-bottom:0"><label>Quantidade</label>
+      <div class="qty"><button type="button" class="minus">−</button><span class="q">1</span><button type="button" class="plus">＋</button></div>
+    </div>`;
+  const type=div.querySelector('.d-type'), serv=div.querySelector('.d-serv'), q=div.querySelector('.q');
+  function fillServ(){const d=DRINKS.find(x=>x.id===type.value);
+    serv.innerHTML=d.serv.map((s,i)=>`<option value="${i}">${s[0]}</option>`).join('');}
+  fillServ();
+  type.onchange=fillServ;
+  div.querySelector('.minus').onclick=()=>{let v=+q.textContent;if(v>1)q.textContent=v-1;};
+  div.querySelector('.plus').onclick=()=>{let v=+q.textContent;if(v<30)q.textContent=v+1;};
+  div.querySelector('.del').onclick=()=>{if(drinksEl.children.length>1)div.remove();};
+  drinksEl.appendChild(div);
+}
+drinkRow();
+document.getElementById('addDrink').onclick=drinkRow;
+
+/* ---------- cálculo ---------- */
+function totalAlcoholGrams(){
+  let g=0;
+  drinksEl.querySelectorAll('.drink').forEach(row=>{
+    const d=DRINKS.find(x=>x.id===row.querySelector('.d-type').value);
+    const ml=d.serv[+row.querySelector('.d-serv').value][1];
+    const qt=+row.querySelector('.q').textContent;
+    g += ml*(d.abv/100)*ETHANOL_DENSITY*qt;
+  });
+  return g;
+}
+// Água corporal total (Watson) em litros
+function tbw(sex,age,h,w){
+  if(sex==='m') return 2.447 - 0.09516*age + 0.1074*h + 0.3362*w;
+  return -2.097 + 0.1069*h + 0.2466*w;
+}
+function hoursSince(){
+  if(when==='now') return 0;
+  const val=document.getElementById('horaFim').value;
+  if(!val) return 0;
+  const [hh,mm]=val.split(':').map(Number);
+  const now=new Date();
+  let end=new Date(); end.setHours(hh,mm,0,0);
+  if(end>now) end.setDate(end.getDate()-1); // horário no futuro = foi ontem
+  return Math.max(0,(now-end)/3600000);
+}
+
+const MSG_NO=[
+  "Seu fígado entrou em hora extra. Deixa o carro quietinho e bora de aplicativo. 🚕",
+  "Hoje você e o volante são só amigos. Nada de romance por enquanto. 🚫",
+  "A pinga foi boa, mas o teste do bafômetro não perdoa. Melhor não arriscar! 🍃",
+  "Calma, piloto. Seu corpo ainda tá processando a festa. Chama um motorista. 😅",
+  "O carro pode esperar. A blitz, não. Bora de carona! 🚦",
+  "Nem que a vaca tussa. Senta, respira e pede um lanche enquanto isso. 🍔",
+];
+const MSG_OK=[
+  "Pelos nossos cálculos, o álcool já evaporou do sistema. Mas dirija com responsa! 🚗",
+  "Tá zerado pela estimativa! Ainda assim, se sentir qualquer coisa estranha, não vá. 👍",
+  "Aparentemente liberado. Cinto no peito, juízo na cabeça e mão no volante. 🛣️",
+];
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+
+let lastFreeDate=null; // para o lembrete
+
+document.getElementById('calcBtn').onclick=()=>{
+  const age=+document.getElementById('idade').value;
+  const h=+document.getElementById('altura').value;
+  const w=+document.getElementById('peso').value;
+  if(!age||!h||!w||age<18||w<35||h<130){
+    alert('Confira seus dados: idade (18+), peso e altura precisam estar preenchidos. 🙂');return;
+  }
+  const A=totalAlcoholGrams();
+  const water=Math.max(5,tbw(sex,age,h,w));
+  const t=hoursSince();
+  // BAC (g/L) = 0.806 * álcool(g) / água corporal(L) − β*tempo
+  let bac = 0.806*A/water - BETA*t;
+  if(bac<0) bac=0;
+  const canDrive = bac<=LEI_SECA+1e-6;
+  // tempo até zerar
+  const hoursToSafe = bac>0 ? (bac/BETA)+0.5 : 0; // +30min de margem de segurança
+  const freeAt=new Date(Date.now()+hoursToSafe*3600000);
+  lastFreeDate=freeAt;
+
+  const bacPct=(bac/10).toFixed(3); // g/L -> %
+  const r=document.getElementById('result');
+
+  if(canDrive){
+    r.innerHTML=`
+    <div class="card res-card ok">
+      <div class="res-emoji">🎉🚗</div>
+      <div class="res-title ok">Provavelmente liberado!</div>
+      <p class="res-msg">${rnd(MSG_OK)}</p>
+      <div class="stats">
+        <div class="stat"><div class="v">~0</div><div class="l">álcool no sangue (g/L)</div></div>
+        <div class="stat"><div class="v">${A.toFixed(0)}g</div><div class="l">álcool ingerido</div></div>
+      </div>
+      <p class="tiny">Lembrando: a Lei Seca é tolerância zero. Se bebeu há pouco, espere mais um pouco por segurança.</p>
+    </div>`;
+  } else {
+    const hh=Math.floor(hoursToSafe), mm=Math.round((hoursToSafe-hh)*60);
+    const freeStr=String(freeAt.getHours()).padStart(2,'0')+':'+String(freeAt.getMinutes()).padStart(2,'0');
+    // barra: quão perto de zero (referência 1.0 g/L)
+    const prog=Math.max(4,Math.min(100,(1-Math.min(bac,1))*100));
+    r.innerHTML=`
+    <div class="card res-card no">
+      <div class="res-emoji">🚫🍺</div>
+      <div class="res-title no">Melhor NÃO dirigir</div>
+      <p class="res-msg">${rnd(MSG_NO)}</p>
+      <div class="stats">
+        <div class="stat"><div class="v">${bac.toFixed(2)}</div><div class="l">estimado (g/L)</div></div>
+        <div class="stat"><div class="v">${bacPct}%</div><div class="l">concentração</div></div>
+        <div class="stat"><div class="v">${A.toFixed(0)}g</div><div class="l">álcool</div></div>
+      </div>
+      <div class="freebar"><i style="width:${prog}%"></i></div>
+      <p class="tiny">Estimativa de quanto falta para o álcool zerar (+30 min de margem).</p>
+      <div class="when-free">
+        <div class="h">⏳ Previsão para você estar liberado (estimada)</div>
+        <div class="t">${freeStr}</div>
+        <div class="h">em aproximadamente ${hh}h ${mm}min</div>
+        <button class="remind" id="gcal">📅 Lembrete no Google Agenda</button>
+        <button class="remind alt" id="ics">⬇️ Baixar lembrete (.ics) p/ celular</button>
+      </div>
+      <p class="tiny">Enquanto isso: beba água, coma algo e curta sem pressa. 💧🍔</p>
+    </div>`;
+    document.getElementById('gcal').onclick=openGCal;
+    document.getElementById('ics').onclick=downloadICS;
+  }
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+};
+
+/* ---------- lembretes ---------- */
+function fmtICS(d){ // UTC: YYYYMMDDTHHMMSSZ
+  const p=n=>String(n).padStart(2,'0');
+  return d.getUTCFullYear()+p(d.getUTCMonth()+1)+p(d.getUTCDate())+'T'+p(d.getUTCHours())+p(d.getUTCMinutes())+p(d.getUTCSeconds())+'Z';
+}
+function eventTimes(){
+  const start=lastFreeDate||new Date();
+  const end=new Date(start.getTime()+30*60000);
+  return {start,end};
+}
+const EV_TITLE='🚗 Já posso dirigir? (lembrete)';
+const EV_DESC='Lembrete do app Posso Dirigir: pela estimativa, o álcool já deve ter saído do seu sistema. Mesmo assim, confira como está se sentindo. Na dúvida, não dirija! — by Wanderson Castro';
+
+function openGCal(){
+  const {start,end}=eventTimes();
+  const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
+    '&text='+encodeURIComponent(EV_TITLE)+
+    '&dates='+fmtICS(start)+'/'+fmtICS(end)+
+    '&details='+encodeURIComponent(EV_DESC);
+  window.open(url,'_blank');
+}
+function downloadICS(){
+  const {start,end}=eventTimes();
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PossoDirigir//WandersonCastro//PT-BR',
+    'BEGIN:VEVENT','UID:'+Date.now()+'@posso-dirigir',
+    'DTSTAMP:'+fmtICS(new Date()),
+    'DTSTART:'+fmtICS(start),'DTEND:'+fmtICS(end),
+    'SUMMARY:'+EV_TITLE,'DESCRIPTION:'+EV_DESC,
+    'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:'+EV_TITLE,'END:VALARM',
+    'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='posso-dirigir-lembrete.ics';
+  document.body.appendChild(a);a.click();a.remove();
+}
+</script>
+</body>
+</html>

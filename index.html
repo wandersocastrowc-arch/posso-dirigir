@@ -99,9 +99,16 @@
   .stat .l{font-size:.72rem;color:var(--muted);margin-top:3px}
   .freebar{height:10px;background:var(--card2);border-radius:99px;overflow:hidden;margin:6px 0 4px}
   .freebar i{display:block;height:100%;background:linear-gradient(90deg,var(--yellow),var(--green));border-radius:99px;transition:width .6s}
+  .margin-note{background:var(--card2);border:1px dashed var(--line);border-radius:10px;
+    padding:10px 12px;font-size:.82rem;color:var(--muted);margin:4px 0 6px;line-height:1.5}
+  .margin-note b{color:var(--txt)}
   .when-free{background:#0c2a3a;border:1px solid #16415a;border-radius:12px;padding:14px;margin-top:14px}
-  .when-free .h{font-size:.8rem;color:var(--muted)}
-  .when-free .t{font-size:1.6rem;font-weight:800;color:var(--accent);margin:2px 0}
+  .when-free .h{font-size:.82rem;color:var(--muted)}
+  .when-free .t{font-size:2rem;font-weight:800;color:#fff;margin:2px 0 10px}
+  .free-at{background:#0a3320;border:1px solid #185c39;border-radius:10px;padding:10px 8px;
+    font-size:.92rem;color:#d6f5e3;margin-bottom:12px;line-height:1.5}
+  .free-at b{color:#4ade80;font-size:1.15rem}
+  .free-at span{color:#9fe6bd;font-size:.82rem}
   .remind{width:100%;background:var(--green);color:#052e16;border:none;border-radius:12px;
     padding:14px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;margin-top:10px}
   .remind.alt{background:var(--card2);color:var(--accent);border:1px solid var(--line);margin-top:8px}
@@ -110,8 +117,26 @@
   .disc b{color:#fbbf24}
   footer{text-align:center;margin-top:26px;color:var(--muted);font-size:.85rem}
   footer .by{font-weight:700;color:var(--txt)}
-  footer .heart{color:var(--red)}
+  footer p{margin-bottom:6px}
+  .aboutlink{color:var(--accent);text-decoration:none;font-weight:600;font-size:.86rem;
+    border-bottom:1px dotted var(--accent);padding-bottom:1px}
   .tiny{font-size:.75rem;color:var(--muted);margin-top:8px;line-height:1.45}
+  /* modal sobre */
+  .modal{position:fixed;inset:0;background:rgba(2,6,18,.78);z-index:50;
+    display:flex;align-items:flex-start;justify-content:center;padding:24px 14px;
+    overflow-y:auto;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  .modal-card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    max-width:520px;width:100%;padding:22px 20px 26px;position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .modal-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:10px;
+    background:var(--card2);border:1px solid var(--line);color:var(--txt);font-size:1rem;cursor:pointer}
+  .modal-card h2{font-size:1.3rem;margin-bottom:10px}
+  .modal-card h3{font-size:1.05rem;margin:20px 0 8px;color:var(--accent)}
+  .modal-card p{font-size:.92rem;margin-bottom:10px;line-height:1.55}
+  .formula{background:var(--card2);border:1px solid var(--line);border-radius:10px;
+    padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;
+    color:#bfe6ff;margin:6px 0;line-height:1.6;overflow-x:auto}
+  .mtiny{font-size:.78rem;color:var(--muted);margin-bottom:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -191,14 +216,55 @@
 </div>
 
 <footer>
-  <p>Developed with <span class="heart">♥</span> by <span class="by">Wanderson Castro</span></p>
+  <p><a href="#" id="aboutLink" class="aboutlink">ℹ️ Sobre &amp; metodologia do cálculo</a></p>
+  <p>Developed by <span class="by">Wanderson Castro</span></p>
   <p class="tiny">Ferramenta educativa e de conscientização. Não nos responsabilizamos por decisões tomadas com base no resultado.</p>
 </footer>
+
+<!-- MODAL SOBRE -->
+<div class="modal hidden" id="aboutModal">
+  <div class="modal-card">
+    <button class="modal-close" id="aboutClose" aria-label="fechar">✕</button>
+    <h2>Sobre</h2>
+    <p>O <b>Posso Dirigir?</b> é uma ferramenta educativa e de conscientização que <b>estima</b> a concentração de álcool no sangue (a famosa BAC) e indica se, pela estimativa, você já estaria apto a dirigir segundo a <b>Lei Seca</b> brasileira — que é de <b>tolerância zero</b>. Ele não substitui um bafômetro, um exame de sangue, nem o bom senso.</p>
+
+    <h3>Como o cálculo funciona</h3>
+
+    <p><b>1. Quanto álcool você ingeriu</b><br>
+    A partir da bebida, do tamanho da dose e da quantidade:</p>
+    <div class="formula">álcool (g) = volume (ml) × (teor % ÷ 100) × 0,789</div>
+    <p class="mtiny">0,789 g/ml é a densidade do etanol. Se você dividiu a bebida com a galera, o total é dividido pelo número de pessoas.</p>
+
+    <p><b>2. Sua água corporal total (fórmula de Watson)</b><br>
+    Usa sexo, idade, peso e altura — quanto mais água no corpo, mais o álcool se dilui:</p>
+    <div class="formula">Homens:&nbsp; ÁCT = 2,447 − 0,09516×idade + 0,1074×altura + 0,3362×peso<br>
+    Mulheres: ÁCT = −2,097 + 0,1069×altura + 0,2466×peso</div>
+    <p class="mtiny">altura em cm, peso em kg, resultado em litros.</p>
+
+    <p><b>3. Concentração no sangue (Widmark adaptado)</b></p>
+    <div class="formula">BAC (g/L) = 0,806 × álcool(g) ÷ ÁCT(L) − β × tempo(h)</div>
+    <p class="mtiny">β = 0,15 g/L por hora (taxa média de eliminação do álcool); tempo = horas desde o último gole.</p>
+
+    <p><b>4. Tempo até zerar</b><br>
+    Divide-se o BAC atual pela taxa de eliminação (0,15 g/L por hora) e soma-se <b>+30 minutos de margem de segurança</b>.</p>
+
+    <p><b>5. Limite legal</b><br>
+    Brasil, <b>Lei Seca</b>: tolerância zero. Qualquer quantidade de álcool estimada já resulta em "melhor não dirigir".</p>
+
+    <p><b>6. Margem de assertividade: ±20%</b><br>
+    O fator de distribuição do álcool e a velocidade de eliminação variam de pessoa para pessoa. Por isso o resultado é uma <b>faixa estimada</b>, e não um número exato.</p>
+
+    <h3>Limitações</h3>
+    <p>Alimentação, metabolismo, medicamentos, doenças, sono, hidratação e o tipo de bebida afetam o resultado real e <b>não entram nesta conta</b>. Trate o número como uma referência aproximada. <b>Na menor dúvida, não dirija</b> — chame um motorista, um amigo ou um aplicativo.</p>
+
+    <p class="mtiny" style="text-align:center;margin-top:18px">Developed by <b>Wanderson Castro</b></p>
+  </div>
+</div>
 
 <script>
 /* ---------- dados das bebidas ---------- */
 const DRINKS = [
-  {id:'cerveja',  name:'🍺 Cerveja',            abv:5,  serv:[['Latinha (269ml)',269],['Latinha (350ml)',350],['Long neck (355ml)',355],['Garrafa (600ml)',600],['Caneca de chopp (300ml)',300]]},
+  {id:'cerveja',  name:'🍺 Cerveja',            abv:5,  serv:[['Latinha (269ml)',269],['Latinha (350ml)',350],['Long neck (355ml)',355],['Garrafa (600ml)',600],['Litrão (1000ml)',1000],['Copo (200ml)',200],['Copo (300ml)',300],['Caneca de chopp (300ml)',300]]},
   {id:'ipa',      name:'🍺 Cerveja forte / IPA', abv:8,  serv:[['Latinha (350ml)',350],['Copo (300ml)',300],['Garrafa (500ml)',500]]},
   {id:'vinho',    name:'🍷 Vinho',              abv:12, serv:[['Taça (150ml)',150],['Taça cheia (200ml)',200],['Garrafa (750ml)',750]]},
   {id:'espumante',name:'🥂 Espumante / Champanhe',abv:12,serv:[['Taça (120ml)',120],['Garrafa (750ml)',750]]},
@@ -214,6 +280,13 @@ const DRINKS = [
 const ETHANOL_DENSITY = 0.789;   // g/ml
 const BETA = 0.15;               // g/L por hora (eliminação média)
 const LEI_SECA = 0.0;            // tolerância zero (Brasil)
+const MARGIN = 0.20;             // margem de estimativa do método (~±20%)
+
+/* ---------- modal sobre ---------- */
+const aboutModal=document.getElementById('aboutModal');
+document.getElementById('aboutLink').onclick=e=>{e.preventDefault();aboutModal.classList.remove('hidden');document.body.style.overflow='hidden';};
+document.getElementById('aboutClose').onclick=()=>{aboutModal.classList.add('hidden');document.body.style.overflow='';};
+aboutModal.onclick=e=>{if(e.target===aboutModal){aboutModal.classList.add('hidden');document.body.style.overflow='';}};
 
 /* ---------- estado ---------- */
 let sex = 'm';
@@ -243,16 +316,25 @@ function drinkRow(){
     <button type="button" class="del" title="remover">✕</button>
     <div class="field"><label>Bebida</label><select class="d-type">${opts}</select></div>
     <div class="field"><label>Tamanho / dose</label><select class="d-serv"></select></div>
-    <div class="field" style="margin-bottom:0"><label>Quantidade</label>
-      <div class="qty"><button type="button" class="minus">−</button><span class="q">1</span><button type="button" class="plus">＋</button></div>
-    </div>`;
+    <div class="row" style="margin-bottom:0">
+      <div><label>Quantidade</label>
+        <div class="qty"><button type="button" class="minus">−</button><span class="q">1</span><button type="button" class="plus">＋</button></div>
+      </div>
+      <div><label>Dividido entre 👥</label>
+        <div class="qty"><button type="button" class="pminus">−</button><span class="p">1</span><button type="button" class="pplus">＋</button></div>
+      </div>
+    </div>
+    <p class="tiny" style="margin-top:8px">Rachou o litrão/garrafa com a galera? Coloque quantas pessoas beberam junto.</p>`;
   const type=div.querySelector('.d-type'), serv=div.querySelector('.d-serv'), q=div.querySelector('.q');
   function fillServ(){const d=DRINKS.find(x=>x.id===type.value);
     serv.innerHTML=d.serv.map((s,i)=>`<option value="${i}">${s[0]}</option>`).join('');}
   fillServ();
   type.onchange=fillServ;
+  const p=div.querySelector('.p');
   div.querySelector('.minus').onclick=()=>{let v=+q.textContent;if(v>1)q.textContent=v-1;};
   div.querySelector('.plus').onclick=()=>{let v=+q.textContent;if(v<30)q.textContent=v+1;};
+  div.querySelector('.pminus').onclick=()=>{let v=+p.textContent;if(v>1)p.textContent=v-1;};
+  div.querySelector('.pplus').onclick=()=>{let v=+p.textContent;if(v<20)p.textContent=v+1;};
   div.querySelector('.del').onclick=()=>{if(drinksEl.children.length>1)div.remove();};
   drinksEl.appendChild(div);
 }
@@ -266,7 +348,8 @@ function totalAlcoholGrams(){
     const d=DRINKS.find(x=>x.id===row.querySelector('.d-type').value);
     const ml=d.serv[+row.querySelector('.d-serv').value][1];
     const qt=+row.querySelector('.q').textContent;
-    g += ml*(d.abv/100)*ETHANOL_DENSITY*qt;
+    const ppl=Math.max(1,+row.querySelector('.p').textContent);
+    g += ml*(d.abv/100)*ETHANOL_DENSITY*qt/ppl;
   });
   return g;
 }
@@ -287,19 +370,47 @@ function hoursSince(){
 }
 
 const MSG_NO=[
-  "Seu fígado entrou em hora extra. Deixa o carro quietinho e bora de aplicativo. 🚕",
-  "Hoje você e o volante são só amigos. Nada de romance por enquanto. 🚫",
-  "A pinga foi boa, mas o teste do bafômetro não perdoa. Melhor não arriscar! 🍃",
-  "Calma, piloto. Seu corpo ainda tá processando a festa. Chama um motorista. 😅",
-  "O carro pode esperar. A blitz, não. Bora de carona! 🚦",
-  "Nem que a vaca tussa. Senta, respira e pede um lanche enquanto isso. 🍔",
+  "🟥 CARTÃO VERMELHO pro volante! Hoje você assiste o jogo do banco. Bora de Uber, parça.",
+  "IH, RAPAZ! O VAR foi chamado e confirmou: tá impedido de dirigir. Senta que lá vem a carona. 🚕",
+  "Como diria o Craque Neto: PILANTRA, esse carro hoje NÃO! Vai pra casa de aplicativo, é mais seguro.",
+  "Pedro Certezas anota aí: certeza ABSOLUTA que hoje não rola dirigir. Pode confiar! ✍️",
+  "Falha de cobertura seria pegar o carro agora. Marca a carona e não vacila na zaga. 🛡️",
+  "Bem amigos! Haja coração pra esperar, mas o juiz apitou: sem dirigir hoje. 🟥",
+  "Tá lá o corpo do seu fígado estendido em campo. Substituição obrigatória: chama o motorista. 🚑",
+  "Craque Daniel mandou recado: hoje o craque fica na arquibancada. Bola pra frente, sem carro. 🍺",
+  "Deu zebra! O bafômetro é um zagueirão e te marca homem a homem. Melhor não arriscar. 🦓",
+  "É O CAZÉ confirmando: RESENHA nota 10, direção nota zero. Bora de aplicativo, menor. 📲",
+  "Impedimento na origem! Sai de campo devagar e deixa o carro no banco de reservas. 🚩",
+  "Pênalti claríssimo se você encostar no volante agora. Não dá bandeira pro juiz — chama a carona. ⚽",
+  "Galvão tá gritando: NÃÃÃO, sai que é sua, Taffarel! Larga essa chave e relaxa. 🧤",
+  "Cartão amarelo pra pressa, vermelho pro volante. Hoje o jogo é de boa, em casa. 🟨🟥",
+  "Resenha nível Champions, reflexo nível várzea. Deixa o carro quietinho no estacionamento. 🏆",
+  "O técnico (sua consciência) te tirou do jogo. Acata a substituição e descansa o craque. 🔄",
+  "Tá mais perdido que zagueiro em dia de drible. Senta, bebe água e pede o motorista. 💧",
+  "A blitz é a defesa mais fechada do campeonato. Não tenta o drible — vai de carona! 🚓",
 ];
 const MSG_OK=[
-  "Pelos nossos cálculos, o álcool já evaporou do sistema. Mas dirija com responsa! 🚗",
-  "Tá zerado pela estimativa! Ainda assim, se sentir qualquer coisa estranha, não vá. 👍",
-  "Aparentemente liberado. Cinto no peito, juízo na cabeça e mão no volante. 🛣️",
+  "🟢 Bola rolando! Pela estimativa, tá liberado pra entrar em campo. Mas dirige com responsa, craque.",
+  "Pedro Certezas garante: certeza que zerou. Anota aí — e mesmo assim, juízo no volante! ✍️",
+  "IH, RAPAZ! Tá limpo igual gramado do Maracanã. Pode ir, mas sem firula na direção. ⚽",
+  "VAR analisou e LIBEROU o lance. Bola pra frente, com cinto e atenção total. ✅",
+  "Como diria o Galvão: tá tudo certo, bem amigo! Boa viagem e haja coração no trânsito. 🚗",
+  "Saiu da resenha e foi pro vestiário em ordem. Pode dirigir, mas sem acelerar como ponta veloz. 🏁",
 ];
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
+
+// rótulo amigável do dia: "ainda hoje", "amanhã (ter 16/06)" etc.
+function dayLabel(target){
+  const dias=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+  const now=new Date();
+  const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const d1=new Date(target.getFullYear(),target.getMonth(),target.getDate());
+  const diff=Math.round((d1-d0)/86400000);
+  const dd=String(target.getDate()).padStart(2,'0'), mm=String(target.getMonth()+1).padStart(2,'0');
+  if(diff<=0) return 'ainda hoje';
+  if(diff===1) return 'amanhã • '+dias[target.getDay()]+', '+dd+'/'+mm;
+  return dias[target.getDay()]+', '+dd+'/'+mm;
+}
 
 let lastFreeDate=null; // para o lembrete
 
@@ -335,13 +446,16 @@ document.getElementById('calcBtn').onclick=()=>{
         <div class="stat"><div class="v">~0</div><div class="l">álcool no sangue (g/L)</div></div>
         <div class="stat"><div class="v">${A.toFixed(0)}g</div><div class="l">álcool ingerido</div></div>
       </div>
+      <div class="margin-note">🎯 Margem de assertividade do teste: <b>±${(MARGIN*100).toFixed(0)}%</b> · estimativa aproximada, não é bafômetro.</div>
       <p class="tiny">Lembrando: a Lei Seca é tolerância zero. Se bebeu há pouco, espere mais um pouco por segurança.</p>
     </div>`;
   } else {
     const hh=Math.floor(hoursToSafe), mm=Math.round((hoursToSafe-hh)*60);
+    const waitStr=(hh>0?hh+'h ':'')+mm+'min';
     const freeStr=String(freeAt.getHours()).padStart(2,'0')+':'+String(freeAt.getMinutes()).padStart(2,'0');
     // barra: quão perto de zero (referência 1.0 g/L)
     const prog=Math.max(4,Math.min(100,(1-Math.min(bac,1))*100));
+    const low=(bac*(1-MARGIN)).toFixed(2), high=(bac*(1+MARGIN)).toFixed(2);
     r.innerHTML=`
     <div class="card res-card no">
       <div class="res-emoji">🚫🍺</div>
@@ -353,17 +467,16 @@ document.getElementById('calcBtn').onclick=()=>{
         <div class="stat"><div class="v">${A.toFixed(0)}g</div><div class="l">álcool</div></div>
       </div>
       <div class="freebar"><i style="width:${prog}%"></i></div>
-      <p class="tiny">Estimativa de quanto falta para o álcool zerar (+30 min de margem).</p>
+      <div class="margin-note">🎯 Margem de assertividade: <b>±${(MARGIN*100).toFixed(0)}%</b> · sua taxa real deve ficar entre <b>${low}</b> e <b>${high} g/L</b></div>
       <div class="when-free">
-        <div class="h">⏳ Previsão para você estar liberado (estimada)</div>
-        <div class="t">${freeStr}</div>
-        <div class="h">em aproximadamente ${hh}h ${mm}min</div>
-        <button class="remind" id="gcal">📅 Lembrete no Google Agenda</button>
-        <button class="remind alt" id="ics">⬇️ Baixar lembrete (.ics) p/ celular</button>
+        <div class="h">⏳ Você ainda precisa esperar cerca de</div>
+        <div class="t">${waitStr}</div>
+        <div class="free-at">🟢 Liberado (estimado) por volta das <b>${freeStr}</b><br><span>${dayLabel(freeAt)}</span></div>
+        <button class="remind" id="ics">⏰ Baixar lembrete com alarme (.ics)</button>
+        <p class="tiny" style="margin-top:8px">Baixe o arquivo e abra no celular: ele entra direto na sua agenda com um alarme no horário. 📲</p>
       </div>
-      <p class="tiny">Enquanto isso: beba água, coma algo e curta sem pressa. 💧🍔</p>
+      <p class="tiny">Estimativa de quanto falta para o álcool zerar, com +30 min de margem de segurança. Enquanto isso: beba água, coma algo e curta sem pressa. 💧🍔</p>
     </div>`;
-    document.getElementById('gcal').onclick=openGCal;
     document.getElementById('ics').onclick=downloadICS;
   }
   document.getElementById('result').scrollIntoView({behavior:'smooth'});
@@ -382,14 +495,6 @@ function eventTimes(){
 const EV_TITLE='🚗 Já posso dirigir? (lembrete)';
 const EV_DESC='Lembrete do app Posso Dirigir: pela estimativa, o álcool já deve ter saído do seu sistema. Mesmo assim, confira como está se sentindo. Na dúvida, não dirija! — by Wanderson Castro';
 
-function openGCal(){
-  const {start,end}=eventTimes();
-  const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
-    '&text='+encodeURIComponent(EV_TITLE)+
-    '&dates='+fmtICS(start)+'/'+fmtICS(end)+
-    '&details='+encodeURIComponent(EV_DESC);
-  window.open(url,'_blank');
-}
 function downloadICS(){
   const {start,end}=eventTimes();
   const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PossoDirigir//WandersonCastro//PT-BR',

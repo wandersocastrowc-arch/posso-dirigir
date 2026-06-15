@@ -162,23 +162,23 @@
   <div class="field">
     <label>Sexo biológico</label>
     <div class="seg" id="sexSeg">
-      <button type="button" data-v="m" class="on">♂ Masculino</button>
+      <button type="button" data-v="m">♂ Masculino</button>
       <button type="button" data-v="f">♀ Feminino</button>
     </div>
   </div>
   <div class="row">
     <div class="field">
       <label>Idade</label>
-      <input id="idade" type="number" inputmode="numeric" min="18" max="110" placeholder="ex: 30" value="30">
+      <input id="idade" type="number" inputmode="numeric" min="18" max="110" placeholder="ex: 30">
     </div>
     <div class="field">
       <label>Peso (kg)</label>
-      <input id="peso" type="number" inputmode="numeric" min="35" max="250" placeholder="ex: 75" value="75">
+      <input id="peso" type="number" inputmode="numeric" min="35" max="250" placeholder="ex: 75">
     </div>
   </div>
   <div class="field">
     <label>Altura (cm)</label>
-    <input id="altura" type="number" inputmode="numeric" min="130" max="230" placeholder="ex: 175" value="175">
+    <input id="altura" type="number" inputmode="numeric" min="130" max="230" placeholder="ex: 175">
   </div>
 </div>
 
@@ -290,7 +290,7 @@ document.getElementById('aboutClose').onclick=()=>{aboutModal.classList.add('hid
 aboutModal.onclick=e=>{if(e.target===aboutModal){aboutModal.classList.add('hidden');document.body.style.overflow='';}};
 
 /* ---------- estado ---------- */
-let sex = 'm';
+let sex = '';
 let when = 'now';
 
 /* ---------- sexo ---------- */
@@ -419,6 +419,9 @@ document.getElementById('calcBtn').onclick=()=>{
   const age=+document.getElementById('idade').value;
   const h=+document.getElementById('altura').value;
   const w=+document.getElementById('peso').value;
+  if(!sex){
+    alert('Selecione o sexo biológico pra começar. 🙂');return;
+  }
   if(!age||!h||!w||age<18||w<35||h<130){
     alert('Confira seus dados: idade (18+), peso e altura precisam estar preenchidos. 🙂');return;
   }
@@ -473,9 +476,9 @@ document.getElementById('calcBtn').onclick=()=>{
         <div class="h">⏳ Você ainda precisa esperar cerca de</div>
         <div class="t">${waitStr}</div>
         <div class="free-at">🟢 Liberado (estimado) por volta das <b>${freeStr}</b><br><span>${dayLabel(freeAt)}</span></div>
-        <button class="remind" id="cal">📲 Abrir direto na agenda</button>
-        <button class="remind alt" id="ics">⏰ Baixar lembrete (.ics) com alarme</button>
-        <p class="tiny" style="margin-top:8px">"Abrir na agenda" leva o evento direto pro app de calendário. O .ics funciona offline e também no iPhone (Apple Agenda). 📅</p>
+        <button class="remind" id="cal">📅 Adicionar na agenda - Android</button>
+        <button class="remind alt" id="ics">📅 Adicionar na agenda - iPhone</button>
+        <p class="tiny" style="margin-top:8px">Toque na opção do seu celular pra salvar o lembrete com alarme no horário. 📲</p>
       </div>
       <p class="tiny">Estimativa de quanto falta para o álcool zerar, com +30 min de margem de segurança. Enquanto isso: beba água, coma algo e curta sem pressa. 💧🍔</p>
     </div>`;

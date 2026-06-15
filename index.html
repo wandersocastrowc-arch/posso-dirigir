@@ -473,11 +473,13 @@ document.getElementById('calcBtn').onclick=()=>{
         <div class="h">⏳ Você ainda precisa esperar cerca de</div>
         <div class="t">${waitStr}</div>
         <div class="free-at">🟢 Liberado (estimado) por volta das <b>${freeStr}</b><br><span>${dayLabel(freeAt)}</span></div>
-        <button class="remind" id="ics">⏰ Baixar lembrete com alarme (.ics)</button>
-        <p class="tiny" style="margin-top:8px">Baixe o arquivo e abra no celular: ele entra direto na sua agenda com um alarme no horário. 📲</p>
+        <button class="remind" id="cal">📲 Abrir direto na agenda</button>
+        <button class="remind alt" id="ics">⏰ Baixar lembrete (.ics) com alarme</button>
+        <p class="tiny" style="margin-top:8px">"Abrir na agenda" leva o evento direto pro app de calendário. O .ics funciona offline e também no iPhone (Apple Agenda). 📅</p>
       </div>
       <p class="tiny">Estimativa de quanto falta para o álcool zerar, com +30 min de margem de segurança. Enquanto isso: beba água, coma algo e curta sem pressa. 💧🍔</p>
     </div>`;
+    document.getElementById('cal').onclick=openCal;
     document.getElementById('ics').onclick=downloadICS;
   }
   document.getElementById('result').scrollIntoView({behavior:'smooth'});
@@ -496,6 +498,14 @@ function eventTimes(){
 const EV_TITLE='🚗 Já posso dirigir? (lembrete)';
 const EV_DESC='Lembrete do app Posso Dirigir: pela estimativa, o álcool já deve ter saído do seu sistema. Mesmo assim, confira como está se sentindo. Na dúvida, não dirija! — by Wanderson Castro';
 
+function openCal(){
+  const {start,end}=eventTimes();
+  const url='https://calendar.google.com/calendar/render?action=TEMPLATE'
+    +'&text='+encodeURIComponent(EV_TITLE)
+    +'&dates='+fmtICS(start)+'/'+fmtICS(end)
+    +'&details='+encodeURIComponent(EV_DESC);
+  window.open(url,'_blank');
+}
 function downloadICS(){
   const {start,end}=eventTimes();
   const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PossoDirigir//WandersonCastro//PT-BR',

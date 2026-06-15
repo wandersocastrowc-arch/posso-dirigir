@@ -1,0 +1,15 @@
+{
+  "name": "Posso Dirigir?",
+  "short_name": "Posso Dirigir?",
+  "description": "Calculadora que estima se já dá pra dirigir depois de beber.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d121e",
+  "theme_color": "#0d121e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

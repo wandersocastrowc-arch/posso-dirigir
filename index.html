@@ -3,9 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0f172a">
-<meta name="description" content="Calculadora bem-humorada que estima se você já pode dirigir depois de beber. Estimativa aproximada — na dúvida, chame um motorista.">
-<title>Posso Dirigir? 🚗🍺</title>
+<meta name="theme-color" content="#0d121e">
+<meta name="description" content="Calculadora que estima se já dá pra dirigir depois de beber. Estimativa aproximada — no Brasil, Lei Seca é tolerância zero. Na dúvida, não dirija.">
+<title>Posso Dirigir?</title>
+
+<!-- ícones -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- preview ao compartilhar (Open Graph / Twitter) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Posso Dirigir?">
+<meta property="og:title" content="Posso Dirigir?">
+<meta property="og:description" content="Calculadora que estima se já dá pra pegar o volante. Estimativa aproximada — Lei Seca: tolerância zero.">
+<meta property="og:url" content="https://wandersocastrowc-arch.github.io/posso-dirigir/">
+<meta property="og:image" content="https://wandersocastrowc-arch.github.io/posso-dirigir/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Posso Dirigir?">
+<meta name="twitter:description" content="Calculadora que estima se já dá pra pegar o volante. Lei Seca: tolerância zero.">
+<meta name="twitter:image" content="https://wandersocastrowc-arch.github.io/posso-dirigir/og-image.png">
 <style>
   :root{
     --bg1:#0f172a; --bg2:#1e1b4b; --card:#1e293b; --card2:#27344a;
@@ -19,10 +40,10 @@
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     min-height:100%;font-size:16px;line-height:1.5}
   body{padding:18px 16px 60px;max-width:520px;margin:0 auto}
-  header{text-align:center;margin:8px 0 22px}
-  header h1{font-size:1.7rem;font-weight:800;letter-spacing:-.5px}
-  header h1 .em{font-size:1.5rem}
-  header p{color:var(--muted);font-size:.9rem;margin-top:6px}
+  header{text-align:center;margin:14px 0 24px}
+  header .mark{display:block;margin:0 auto 10px}
+  header h1{font-size:1.8rem;font-weight:800;letter-spacing:-.5px}
+  header p{color:var(--muted);font-size:.9rem;margin-top:8px;max-width:340px;margin-left:auto;margin-right:auto}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
     padding:18px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
   .card h2{font-size:1.05rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
@@ -95,8 +116,18 @@
 </head>
 <body>
 <header>
-  <h1><span class="em">🚗</span> Posso Dirigir? <span class="em">🍺</span></h1>
-  <p>A calculadora que te diz se é melhor pegar o volante… ou o Uber.</p>
+  <svg class="mark" viewBox="0 0 512 512" width="56" height="56" aria-hidden="true">
+    <g fill="none" stroke="#5696d6" stroke-width="30" stroke-linecap="round">
+      <circle cx="256" cy="256" r="165"/>
+      <circle cx="256" cy="256" r="99" stroke-width="16"/>
+      <line x1="256" y1="256" x2="256" y2="421"/>
+      <line x1="256" y1="256" x2="113" y2="174"/>
+      <line x1="256" y1="256" x2="399" y2="174"/>
+    </g>
+    <circle cx="256" cy="256" r="26" fill="#5696d6"/>
+  </svg>
+  <h1>Posso Dirigir?</h1>
+  <p>Estime se já dá pra pegar o volante — ou se é hora de chamar a carona.</p>
 </header>
 
 <!-- DADOS -->
@@ -167,7 +198,7 @@
 <script>
 /* ---------- dados das bebidas ---------- */
 const DRINKS = [
-  {id:'cerveja',  name:'🍺 Cerveja',            abv:5,  serv:[['Latinha (350ml)',350],['Long neck (355ml)',355],['Garrafa (600ml)',600],['Caneca de chopp (300ml)',300]]},
+  {id:'cerveja',  name:'🍺 Cerveja',            abv:5,  serv:[['Latinha (269ml)',269],['Latinha (350ml)',350],['Long neck (355ml)',355],['Garrafa (600ml)',600],['Caneca de chopp (300ml)',300]]},
   {id:'ipa',      name:'🍺 Cerveja forte / IPA', abv:8,  serv:[['Latinha (350ml)',350],['Copo (300ml)',300],['Garrafa (500ml)',500]]},
   {id:'vinho',    name:'🍷 Vinho',              abv:12, serv:[['Taça (150ml)',150],['Taça cheia (200ml)',200],['Garrafa (750ml)',750]]},
   {id:'espumante',name:'🥂 Espumante / Champanhe',abv:12,serv:[['Taça (120ml)',120],['Garrafa (750ml)',750]]},
